@@ -46,4 +46,8 @@ contract FreePricingModule is IPricingModules, Facet {
         }
         return modules;
     }
+
+    function getPrice() external pure returns (uint256) {
+        return 0;
+    }
 }
