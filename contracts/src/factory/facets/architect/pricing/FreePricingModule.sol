@@ -7,6 +7,8 @@ import {IPricingModules} from "./IPricingModules.sol";
 import {Facet} from "@river-build/diamond/src/facets/Facet.sol";
 
 contract FreePricingModule is IPricingModules, Facet {
+    address[] private pricingModules;
+
     function __FreePricingModule_init() external onlyInitializing {
         __FreePricingModule_init_unchained();
     }
@@ -19,11 +21,29 @@ contract FreePricingModule is IPricingModules, Facet {
         return true;
     }
 
-    function addPricingModule(address) external pure {}
+    function addPricingModule(address module) external {
+        pricingModules.push(module);
+    }
 
-    function removePricingModule(address) external pure {}
+    function removePricingModule(address module) external {
+        for (uint256 i = 0; i < pricingModules.length; i++) {
+            if (pricingModules[i] == module) {
+                pricingModules[i] = pricingModules[pricingModules.length - 1];
+                pricingModules.pop();
+                break;
+            }
+        }
+    }
 
-    function listPricingModules() external pure returns (PricingModule[] memory) {
-        return new PricingModule[](0);
+    function listPricingModules() external view returns (PricingModule[] memory) {
+        PricingModule[] memory modules = new PricingModule[](pricingModules.length);
+        for (uint256 i = 0; i < pricingModules.length; i++) {
+            modules[i] = PricingModule({
+                name: "Free Module",
+                description: "This module is always free",
+                module: pricingModules[i]
+            });
+        }
+        return modules;
     }
 }
