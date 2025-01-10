@@ -1,7 +1,7 @@
 pragma solidity ^0.8.23;
 
 //interfaces
-import {IPricingModules} from "contracts/src/factory/facets/architect/pricing/IPricingModules.sol";
+import {IMembershipPricing} from "contracts/src/spaces/facets/membership/pricing/IMembershipPricing.sol";
 
 //libraries
 
@@ -16,6 +16,7 @@ contract DeployFreePricingModule is FacetHelper, Deployer {
     addSelector(FreePricingModule.isPricingModule.selector);
     addSelector(FreePricingModule.removePricingModule.selector);
     addSelector(FreePricingModule.listPricingModules.selector);
+    addSelector(FreePricingModule.getPrice.selector);
   }
 
   function initializer() public pure override returns (bytes4) {
